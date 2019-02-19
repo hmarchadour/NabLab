@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:WidgetGroup" id="11" measuredWidth="689" measuredHeight="433">
+    <widgets xsi:type="model:Browser" id="1" width="689" height="433" text="Browser&#xA;http://..." measuredWidth="689" measuredHeight="433">
+      <font/>
+    </widgets>
+    <widgets xsi:type="model:TextArea" id="2" x="134" y="72" width="545" height="249" text="// Options obligatoires pour générer&#xA;*const ℝ LENGTH = 0.01;*&#xA;const ℕ X_EDGE_ELEMS = 100;&#xA;const ℕ Y_EDGE_ELEMS = 10;&#xA;const ℕ Z_EDGE_ELEMS = 1;&#xA;const ℝ option_stoptime = 0.2;&#xA;const ℕ option_max_iterations = 20000;" measuredWidth="545" measuredHeight="249">
+      <font/>
+    </widgets>
+    <widgets xsi:type="model:Tree" id="6" y="72" height="351" text="NablaGlace&#xA;-Glace2d.nabla" measuredWidth="135" measuredHeight="351" selection="1">
+      <items x="0" y="5" width="135" height="21" text="NablaGlace"/>
+      <items x="0" y="26" width="135" height="21" text="-Glace2d.nabla"/>
+      <font/>
+    </widgets>
+    <widgets xsi:type="model:Panel" id="7" x="134" y="320" width="545" height="105" measuredWidth="545" measuredHeight="105"/>
+    <widgets xsi:type="model:Image" id="8" x="144" y="342" measuredWidth="256" measuredHeight="77" src="cap%20311.png"/>
+    <widgets xsi:type="model:Label" id="9" x="144" y="320" text="Latex view" measuredWidth="66" measuredHeight="23">
+      <font/>
+    </widgets>
+  </widgets>
+  <hRuler/>
+  <vRuler/>
+  <font size="12px"/>
+</model:Screen>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:WidgetGroup" id="11" measuredWidth="689" measuredHeight="433">
+    <widgets xsi:type="model:Browser" id="1" width="689" height="433" text="Browser&#xA;http://..." measuredWidth="689" measuredHeight="433">
+      <font/>
+    </widgets>
+    <widgets xsi:type="model:TextArea" id="2" x="134" y="72" width="545" height="249" measuredWidth="545" measuredHeight="249">
+      <font/>
+    </widgets>
+    <widgets xsi:type="model:Tree" id="6" y="72" height="351" text="NablaGlace&#xA;-Glace2d.nabla&#xA;-Glace2d.nablair" measuredWidth="143" measuredHeight="351" selection="2">
+      <items x="0" y="5" width="143" height="21" text="NablaGlace"/>
+      <items x="0" y="26" width="143" height="21" text="-Glace2d.nabla"/>
+      <items x="0" y="47" width="143" height="21" text="-Glace2d.nablair"/>
+      <font/>
+    </widgets>
+    <widgets xsi:type="model:Panel" id="7" x="134" y="320" width="545" height="105" measuredWidth="545" measuredHeight="105"/>
+    <widgets xsi:type="model:Label" id="9" x="144" y="320" text="Latex view" measuredWidth="66" measuredHeight="23">
+      <font/>
+    </widgets>
+    <widgets xsi:type="model:Label" id="22" x="209" y="120" text="job1" measuredWidth="32" measuredHeight="58" textAlignment="Center" icon="image (large)" iconPosition="top">
+      <font/>
+    </widgets>
+    <widgets xsi:type="model:Arrow" id="23" x="240" y="144" width="146" height="8" measuredWidth="146" measuredHeight="8" left="false" right="true"/>
+    <widgets xsi:type="model:Label" id="24" x="385" y="120" text="job2" measuredWidth="32" measuredHeight="58" textAlignment="Center" icon="image (large)" iconPosition="top">
+      <font/>
+    </widgets>
+    <widgets xsi:type="model:Label" id="25" x="385" y="192" text="job2" measuredWidth="32" measuredHeight="58" textAlignment="Center" icon="image (large)" iconPosition="top">
+      <font/>
+    </widgets>
+    <widgets xsi:type="model:Arrow" id="26" x="240" y="144" width="146" height="57" measuredWidth="146" measuredHeight="57" left="false" right="true"/>
+  </widgets>
+  <hRuler/>
+  <vRuler/>
+  <font size="12px"/>
+</model:Screen>
