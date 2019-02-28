@@ -1,0 +1,93 @@
+import React from "react";
+
+import { withStyles } from "@material-ui/core/styles";
+import Fab from "@material-ui/core/Fab";
+import AddIcon from "@material-ui/icons/Add";
+import Typography from "@material-ui/core/Typography";
+import Modal from "@material-ui/core/Modal";
+
+import ResourceForm from "./ResourceForm";
+
+const styles = theme => ({
+  fab: {
+    margin: theme.spacing.unit
+  },
+  extendedIcon: {
+    marginRight: theme.spacing.unit
+  },
+  paper: {
+    position: "absolute",
+    width: theme.spacing.unit * 50,
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing.unit * 4,
+    outline: "none"
+  }
+});
+
+function rand() {
+  return Math.round(Math.random() * 20) - 10;
+}
+
+function getModalStyle() {
+  const top = 50 + rand();
+  const left = 50 + rand();
+
+  return {
+    top: `${top}%`,
+    left: `${left}%`,
+    transform: `translate(-${top}%, -${left}%)`
+  };
+}
+
+class AddResource extends React.Component {
+  state = {
+    open: false
+  };
+
+  handleOpen = () => {
+    this.setState({ open: true });
+  };
+
+  handleClose = () => {
+    this.setState({ open: false });
+  };
+
+  handleAddResource = () => {
+    this.props.onRefresh();
+    this.setState({ open: false });
+  };
+
+  render() {
+    const { classes, ...others } = this.props;
+
+    return (
+      <div>
+        <Fab
+          color="primary"
+          aria-label="Add"
+          className={classes.fab}
+          onClick={this.handleOpen}
+        >
+          <AddIcon />
+        </Fab>
+        <Modal
+          aria-labelledby="simple-modal-title"
+          aria-describedby="simple-modal-description"
+          open={this.state.open}
+          onClose={this.handleClose}
+        >
+          <div style={getModalStyle()} className={classes.paper}>
+            <Typography variant="h6" id="modal-title">
+              Create a file
+            </Typography>
+            <Typography variant="subtitle1" id="simple-modal-description" />
+            <ResourceForm {...others} onSubmit={this.handleAddResource} />
+          </div>
+        </Modal>
+      </div>
+    );
+  }
+}
+
+export default withStyles(styles)(AddResource);

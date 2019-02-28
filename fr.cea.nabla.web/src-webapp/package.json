@@ -1,14 +1,18 @@
 {
-  "name": "poc2",
-  "version": "0.1.0",
+  "name": "NabLab-Web",
+  "version": "0.2.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "3.9.2",
+    "@material-ui/icons": "3.0.2",
+    "@material-ui/lab": "3.0.0-alpha.30",
     "@babel/core": "7.1.6",
     "@svgr/webpack": "2.4.1",
     "@types/jest": "23.3.12",
     "@types/node": "10.12.18",
     "@types/react": "16.7.18",
     "@types/react-dom": "16.0.11",
+    "@types/react-router-dom": "4.2.6",
     "apollo-boost": "^0.1.28",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "9.0.0",
@@ -53,6 +57,7 @@
     "react-app-polyfill": "^0.2.0",
     "react-dev-utils": "^7.0.1",
     "react-dom": "^16.7.0",
+    "react-router-dom": "4.3.1",
     "reconnecting-websocket": "^3.2.2",
     "resolve": "1.8.1",
     "sass-loader": "7.1.0",
@@ -65,13 +70,15 @@
     "webpack": "4.19.1",
     "webpack-dev-server": "3.1.14",
     "webpack-manifest-plugin": "2.0.4",
-    "workbox-webpack-plugin": "3.6.3"
+    "workbox-webpack-plugin": "3.6.3",
+    "react-mathjax-preview": "0.1.11"
   },
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js"
   },
+  "homepage": "/nabla/",
   "eslintConfig": {
     "extends": "react-app"
   },
