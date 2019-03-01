@@ -62,7 +62,7 @@ public class NabLaLSPServerConfigurator implements ISiriusServerConfigurator {
 
 			// Initialize the Nabla Xtext language
 			NablaPackage.eINSTANCE.getNsURI();
-			Injector injector = new NablaLSPModule().createInjectorAndDoEMFRegistration();
+			Injector injector = new NablaLSPModule().createInjector();
 			ServerEndpointConfigurator serverEndpointConfigurator = new ServerEndpointConfigurator(injector);
 			Builder endpointConfigBuilder = Builder.create(LanguageServerEndpoint.class, "/lsp");
 			ServerEndpointConfig endpointConfig = endpointConfigBuilder.configurator(serverEndpointConfigurator)
