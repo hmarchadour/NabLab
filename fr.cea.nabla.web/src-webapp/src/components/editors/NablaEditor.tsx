@@ -10,6 +10,8 @@ import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Fab from "@material-ui/core/Fab";
 import SaveIcon from "@material-ui/icons/Save";
+import Popover from "@material-ui/core/Popover";
+import MathJax from "react-mathjax-preview";
 
 const styles = theme => ({
   fab: {
@@ -31,7 +33,11 @@ interface Props {
   resource: string;
   classes: Object;
 }
-class NablaEditor extends Component<Props> {
+
+interface State {
+  formula: string | null;
+}
+class NablaEditor extends Component<Props, State> {
   private editorDom: React.RefObject<HTMLDivElement>;
 
   private editor: monaco.editor.IStandaloneCodeEditor | null;
@@ -40,6 +46,7 @@ class NablaEditor extends Component<Props> {
 
   constructor(props: any) {
     super(props);
+    this.state = { formula: null };
     this.lspService = new LSPServices();
     this.editorDom = React.createRef();
     this.editor = null;
@@ -57,7 +64,11 @@ class NablaEditor extends Component<Props> {
           dom,
           project,
           resource,
-          content
+          content,
+          (formula: string) => {
+            console.log(formula);
+            this.setState({ formula: "$$" + formula + "$$" });
+          }
         );
         var myBinding = this.editor.addCommand(
           monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S,
@@ -78,6 +89,7 @@ class NablaEditor extends Component<Props> {
 
   render() {
     const classes: any = this.props.classes;
+    const { formula } = this.state;
     return (
       <div className="editor-wrapper">
         <div className={classes.buttonsWrapper}>
@@ -94,6 +106,11 @@ class NablaEditor extends Component<Props> {
           </Button>
         </div>
         <div ref={this.editorDom} className="editor" />
+        <div>
+          {formula !== undefined && formula !== null && (
+            <MathJax math={formula} />
+          )}
+        </div>
       </div>
     );
   }

@@ -2,13 +2,12 @@ import {
   MonacoLanguageClient,
   CloseAction,
   ErrorAction,
-  MonacoServices,
   createConnection
 } from "monaco-languageclient";
+import { install, create, get } from "./CustomMonacoService";
 import * as monaco from "monaco-editor";
 import { listen, MessageConnection } from "vscode-ws-jsonrpc";
 import { FEATURE, LANGUAGE_ID, HOST, PORT } from "./const";
-
 const normalizeUrl = require("normalize-url");
 const ReconnectingWebSocket = require("reconnecting-websocket");
 
@@ -46,7 +45,8 @@ export class LSPServices {
     domContainer: HTMLElement,
     project: string,
     localPath: string,
-    initialValue: string
+    initialValue: string,
+    latexListener: (formula: string) => any
   ): monaco.editor.IStandaloneCodeEditor {
     let model = monaco.editor.createModel(
       initialValue,
@@ -86,12 +86,12 @@ export class LSPServices {
         connection.onClose(() => disposable.dispose());
       }
     });
-    this.service = MonacoServices.install(<any>editor);
+    this.service = install(<any>editor, latexListener);
     return editor;
   }
 
   public deleteLSPEditor(editor: monaco.editor.IStandaloneCodeEditor) {
-    const service2 = MonacoServices.get();
+    const service2 = get();
     const model = editor.getModel();
     if (model !== null) {
       model.dispose();
@@ -131,17 +131,5 @@ export class LSPServices {
   private createUrl(host: string, port: string): string {
     const protocol = location.protocol === "https:" ? "wss" : "ws";
     return normalizeUrl(`${protocol}://${host}:${port}/${LANGUAGE_ID}/lsp`);
-  }
-
-  private createWebSocket(url: string): WebSocket {
-    const socketOptions = {
-      maxReconnectionDelay: 10000,
-      minReconnectionDelay: 1000,
-      reconnectionDelayGrowFactor: 1.3,
-      connectionTimeout: 10000,
-      maxRetries: Infinity,
-      debug: false
-    };
-    return new ReconnectingWebSocket(url, undefined, socketOptions);
   }
 }

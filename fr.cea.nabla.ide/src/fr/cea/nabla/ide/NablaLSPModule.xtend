@@ -11,15 +11,13 @@
  * 	Marie-Pierre Oudot - initial implementation
  * 	Jean-Sylvain Camier - Nabla generation support
  *******************************************************************************/
-package fr.cea.nabla.ide 
+package fr.cea.nabla.ide
 
 import com.google.inject.Guice
 import fr.cea.nabla.NablaRuntimeModule
 import fr.cea.nabla.NablaStandaloneSetup
-import org.eclipse.xtext.util.Modules2
-
-import org.eclipse.xtext.ide.server.ServerModule
 import org.eclipse.xtext.resource.IResourceServiceProvider
+import org.eclipse.xtext.util.Modules2
 
 /**
  * Initialization support for running Xtext languages as language servers.
@@ -27,7 +25,7 @@ import org.eclipse.xtext.resource.IResourceServiceProvider
 class NablaLSPModule extends NablaStandaloneSetup {
 
 	override createInjector() {
-		Guice.createInjector(Modules2.mixin(new NablaRuntimeModule, new NablaIdeModule, new ServerModule,
+		Guice.createInjector(Modules2.mixin(new NablaRuntimeModule, new NablaIdeModule, new CustomServerModule,
 			[bind(IResourceServiceProvider.Registry).toProvider(IResourceServiceProvider.Registry.RegistryProvider)]
 		))
 	}
