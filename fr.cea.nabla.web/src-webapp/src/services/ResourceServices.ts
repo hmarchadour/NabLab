@@ -84,7 +84,9 @@ export function createTextFile(
             projectName: $projectName
             containerPath: $containerPath
             description: $description
-          )
+          ) {
+            name
+          }
         }
       `,
       variables: {
