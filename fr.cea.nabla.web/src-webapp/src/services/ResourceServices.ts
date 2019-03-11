@@ -1,10 +1,11 @@
 import gql from "graphql-tag";
 import { client } from "./const";
+import { deleteFile } from "./FileServices";
+import { deleteFolder } from "./FolderServices";
 
-export class Resource {
-  constructor(public name: string, public path: string) {}
-}
-export function getResources(projectName: string): Promise<Resource[]> {
+import { Resource } from "../dto/Resource";
+
+export function getRootResources(projectName: string): Promise<Resource[]> {
   return client
     .query<any>({
       query: gql`
@@ -16,6 +17,7 @@ export function getResources(projectName: string): Promise<Resource[]> {
                   node {
                     name
                     path
+                    __typename
                   }
                 }
               }
@@ -33,113 +35,16 @@ export function getResources(projectName: string): Promise<Resource[]> {
       edges.forEach(edge => {
         const name = edge.node.name;
         const path = edge.node.path;
-        resources.push(new Resource(name, path));
+        const typename = edge.node.__typename;
+        resources.push(
+          new Resource(projectName, name, path, "Folder" === typename)
+        );
       });
       return resources;
     });
 }
-export function updateTextFile(
-  projectName: string,
-  filePath: string,
-  content: string
-): Promise<boolean> {
-  return client
-    .mutate<any>({
-      mutation: gql`
-        mutation($projectName: String!, $filePath: String!, $content: String!) {
-          updateTextFile(
-            projectName: $projectName
-            filePath: $filePath
-            description: { content: $content }
-          ) {
-            name
-          }
-        }
-      `,
-      variables: {
-        projectName: projectName,
-        filePath: filePath,
-        content: content
-      }
-    })
-    .then(result => {
-      client.resetStore();
-      return result.data.updateTextFile !== undefined;
-    });
-}
-export function createTextFile(
-  projectName: string,
-  fileName: string
-): Promise<boolean> {
-  // To debug
-  return client
-    .mutate<any>({
-      mutation: gql`
-        mutation(
-          $projectName: String!
-          $containerPath: String!
-          $description: FileCreationDescription!
-        ) {
-          createFile(
-            projectName: $projectName
-            containerPath: $containerPath
-            description: $description
-          ) {
-            name
-          }
-        }
-      `,
-      variables: {
-        projectName,
-        containerPath: "",
-        description: {
-          kind: "plain/text",
-          name: fileName
-        }
-      }
-    })
-    .then(result => {
-      client.resetStore();
-      return result.data.createFile !== undefined;
-    });
-}
 
-export function deleteFile(
-  projectName: string,
-  fileName: string
-): Promise<any> {
-  // To debug
-  return client
-    .mutate<any>({
-      mutation: gql`
-        mutation(
-          $projectName: String!
-          $containerPath: String!
-          $fileName: String!
-        ) {
-          deleteFile(
-            projectName: $projectName
-            containerPath: $containerPath
-            fileName: $fileName
-          )
-        }
-      `,
-      variables: {
-        projectName: projectName,
-        containerPath: "",
-        fileName: fileName
-      }
-    })
-    .then(result => {
-      client.resetStore();
-      return result.data.deleteFile !== undefined;
-    });
-}
-
-export function getContent(
-  projectName: string,
-  filePath: string
-): Promise<string> {
+export function getSubResources(resource: Resource): Promise<Resource[]> {
   return client
     .query<any>({
       query: gql`
@@ -147,8 +52,16 @@ export function getContent(
           viewer {
             project(name: $projectName) {
               resourceByPath(path: $filePath) {
-                ... on File {
-                  content
+                ... on Folder {
+                  resources(first: 10, after: null) {
+                    edges {
+                      node {
+                        name
+                        path
+                        __typename
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -156,15 +69,62 @@ export function getContent(
         }
       `,
       variables: {
-        projectName: projectName,
-        filePath: filePath
+        projectName: resource.project,
+        filePath: resource.path
       }
     })
     .then(result => {
-      let res = "";
-      if (result.data.viewer.project !== undefined) {
-        res = result.data.viewer.project.resourceByPath.content;
-      }
-      return res;
+      const edges = result.data.viewer.project.resourceByPath.resources.edges;
+      const resources: Resource[] = [];
+      edges.forEach(edge => {
+        const name = edge.node.name;
+        const path = edge.node.path;
+        const typename = edge.node.__typename;
+        resources.push(
+          new Resource(resource.project, name, path, "Folder" === typename)
+        );
+      });
+      return resources;
     });
+}
+
+export function getResource(
+  projectName: string,
+  path: string
+): Promise<Resource> {
+  return client
+    .query<any>({
+      query: gql`
+        query($projectName: String!, $filePath: String!) {
+          viewer {
+            project(name: $projectName) {
+              resourceByPath(path: $filePath) {
+                name
+                path
+                __typename
+              }
+            }
+          }
+        }
+      `,
+      variables: {
+        projectName: projectName,
+        filePath: path
+      }
+    })
+    .then(result => {
+      const resourceByPath = result.data.viewer.project.resourceByPath;
+      const name = resourceByPath.name;
+      const path = resourceByPath.path;
+      const typename = resourceByPath.__typename;
+      return new Resource(projectName, name, path, "Folder" === typename);
+    });
+}
+
+export function deleteResource(resource: Resource): Promise<boolean> {
+  if (resource.isFolder) {
+    return deleteFolder(resource);
+  } else {
+    return deleteFile(resource);
+  }
 }

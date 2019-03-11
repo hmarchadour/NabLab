@@ -3,14 +3,13 @@ import "./NablaEditor.css";
 import * as monaco from "monaco-editor";
 import classNames from "classnames";
 import { LSPServices } from "../../services/LSPServices";
-import { getContent, updateTextFile } from "../../services/ResourceServices";
+import { getTextFile, updateTextFile } from "../../services/FileServices";
 
 import Button from "@material-ui/core/Button";
-import PropTypes from "prop-types";
+
+import { Resource } from "../../dto/Resource";
 import { withStyles } from "@material-ui/core/styles";
-import Fab from "@material-ui/core/Fab";
 import SaveIcon from "@material-ui/icons/Save";
-import Popover from "@material-ui/core/Popover";
 import MathJax from "react-mathjax-preview";
 
 const styles = theme => ({
@@ -24,13 +23,12 @@ const styles = theme => ({
     margin: "10px"
   },
   buttonsWrapper: {
-    "text-align": "right"
+    "text-align": "left"
   }
 });
 
 interface Props {
-  project: string;
-  resource: string;
+  resource: Resource;
   classes: Object;
 }
 
@@ -57,16 +55,14 @@ class NablaEditor extends Component<Props, State> {
 
   componentDidMount() {
     const dom = this.editorDom.current;
-    const { project, resource } = this.props;
+    const { resource } = this.props;
     if (dom !== null) {
-      getContent(project, resource).then(content => {
+      getTextFile(resource).then(content => {
         this.editor = this.lspService.createLSPEditor(
           dom,
-          project,
           resource,
           content,
           (formula: string) => {
-            console.log(formula);
             this.setState({ formula: "$$" + formula + "$$" });
           }
         );
@@ -123,8 +119,8 @@ class NablaEditor extends Component<Props, State> {
     if (this.editor !== null) {
       const model = this.editor.getModel();
       if (model !== null) {
-        const { project, resource } = this.props;
-        updateTextFile(project, resource, model.getValue()).then(() => {
+        const { resource } = this.props;
+        updateTextFile(resource, model.getValue()).then(() => {
           console.log("Saved");
         });
       }

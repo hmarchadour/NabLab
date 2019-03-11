@@ -56,7 +56,7 @@ class App extends Component<
       <ResourcePage
         {...others}
         projectName={match.params.projectName}
-        resourcePath={match.params.resourcePath}
+        resourcePath={decodeURIComponent(match.params.resourcePath)}
       />
     );
     const renderProject = (

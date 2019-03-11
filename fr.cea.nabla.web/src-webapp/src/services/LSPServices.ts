@@ -8,6 +8,7 @@ import { install, create, get } from "./CustomMonacoService";
 import * as monaco from "monaco-editor";
 import { listen, MessageConnection } from "vscode-ws-jsonrpc";
 import { FEATURE, LANGUAGE_ID, HOST, PORT } from "./const";
+import { Resource } from "../dto/Resource";
 const normalizeUrl = require("normalize-url");
 const ReconnectingWebSocket = require("reconnecting-websocket");
 
@@ -43,15 +44,16 @@ export class LSPServices {
 
   public createLSPEditor(
     domContainer: HTMLElement,
-    project: string,
-    localPath: string,
+    resource: Resource,
     initialValue: string,
     latexListener: (formula: string) => any
   ): monaco.editor.IStandaloneCodeEditor {
     let model = monaco.editor.createModel(
       initialValue,
       LANGUAGE_ID,
-      monaco.Uri.parse(`platform:/resource/${project}/${localPath}`)
+      monaco.Uri.parse(
+        `platform:/resource/${resource.project}/${resource.path}`
+      )
     );
 
     const editor: monaco.editor.IStandaloneCodeEditor = monaco.editor.create(

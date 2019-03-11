@@ -1,16 +1,17 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
 
 import IconButton from "@material-ui/core/IconButton";
 import TextField from "@material-ui/core/TextField";
 
-import { createTextFile } from "../services/ResourceServices";
+import { Resource } from "../dto/Resource";
+import { createFile } from "../services/FileServices";
+import { createFolder } from "../services/FolderServices";
 import SaveIcon from "@material-ui/icons/Save";
+
 const styles = theme => ({
   container: {
-    display: "flex",
-    flexWrap: "wrap"
+    display: "flex"
   },
   textField: {
     marginLeft: theme.spacing.unit,
@@ -37,24 +38,39 @@ const styles = theme => ({
   }
 });
 
-class ResourceForm extends React.Component {
-  state = {
-    fileName: "",
-    saving: false,
-    error: false
-  };
+interface Props {
+  container: Resource | string;
+  folder?: boolean;
+  history: History;
+
+  classes: any;
+  onSubmit: () => void;
+}
+
+interface State {
+  resourceName: string;
+  saving: boolean;
+  error: boolean;
+}
+
+class ResourceForm extends Component<Props, State> {
+  constructor(props) {
+    super(props);
+    this.state = { resourceName: "", saving: false, error: false };
+  }
 
   handleSave = () => {
     this.setState({ saving: true });
-    createTextFile(this.props.projectName, this.state.fileName).then(
-      success => {
-        if (success) {
-          this.props.onSubmit();
-        } else {
-          this.setState({ saving: false, error: true });
-        }
+    const createFn = this.props.folder
+      ? createFolder(this.props.container, this.state.resourceName)
+      : createFile(this.props.container, this.state.resourceName);
+    createFn.then(success => {
+      if (success) {
+        this.props.onSubmit();
+      } else {
+        this.setState({ saving: false, error: true });
       }
-    );
+    });
   };
 
   handleSubmit = event => {
@@ -63,12 +79,14 @@ class ResourceForm extends React.Component {
   };
 
   handleChange = event => {
-    this.setState({ fileName: event.target.value });
+    this.setState({ resourceName: event.target.value });
   };
 
   render() {
-    const { classes } = this.props;
-
+    const { classes, folder, container } = this.props;
+    const title = folder
+      ? "Edit the folder name here"
+      : " Edit the file name here";
     return (
       <form
         onSubmit={this.handleSubmit}
@@ -81,7 +99,7 @@ class ResourceForm extends React.Component {
           label="Name"
           style={{ margin: 8 }}
           onChange={this.handleChange}
-          placeholder="Edit the file name here"
+          placeholder={title}
           fullWidth
           margin="normal"
         />
@@ -100,9 +118,5 @@ class ResourceForm extends React.Component {
     );
   }
 }
-
-ResourceForm.propTypes = {
-  classes: PropTypes.object.isRequired
-};
 
 export default withStyles(styles)(ResourceForm);

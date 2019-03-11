@@ -1,55 +1,84 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import Breadcrumbs from '@material-ui/lab/Breadcrumbs';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { withStyles } from "@material-ui/core/styles";
+import Paper from "@material-ui/core/Paper";
+import Typography from "@material-ui/core/Typography";
+import Breadcrumbs from "@material-ui/lab/Breadcrumbs";
 
-import Link from '@material-ui/core/Link';
-import HomeIcon from '@material-ui/icons/Home';
-import FolderIcon from '@material-ui/icons/Folder';
-import CodeIcon from '@material-ui/icons/Code';
+import Link from "@material-ui/core/Link";
+import HomeIcon from "@material-ui/icons/Home";
 
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink } from "react-router-dom";
 
 const styles = theme => ({
   root: {
-    padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
+    padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`
   },
   link: {
-    display: 'flex',
+    display: "flex"
   },
   icon: {
     marginRight: theme.spacing.unit / 2,
     width: 20,
-    height: 20,
-  },
+    height: 20
+  }
 });
 
-
-function Breadcrumb(props) {
-  const { classes } = props;
-  return (
-    <Paper className={classes.root}>
-      <Breadcrumbs arial-label="Breadcrumb">
-        <Link  component={RouterLink} color="inherit"  to = {"/"} className={classes.link}>
-          <HomeIcon className={classes.icon} />
-        </Link>
-        {props.projectName !== undefined &&
-          <Link component={RouterLink} color="inherit" to={"/"+props.projectName} className={classes.link}>
-            <FolderIcon className={classes.icon} />
-            {props.projectName}
+export class Breadcrumb extends Component {
+  render() {
+    const { classes, projectName } = this.props;
+    const pathArray =
+      this.props.resourcePath !== undefined
+        ? this.props.resourcePath.split("/")
+        : [];
+    const projectPath = [];
+    let acc = "";
+    for (let subPath of pathArray) {
+      acc += subPath + "/";
+      projectPath.push({ path: encodeURIComponent(acc), name: subPath });
+    }
+    return (
+      <Paper className={classes.root}>
+        <Breadcrumbs arial-label="Breadcrumb">
+          <Link
+            component={RouterLink}
+            color="inherit"
+            to={"/"}
+            className={classes.link}
+          >
+            <HomeIcon className={classes.icon} />
           </Link>
-        }
-        {props.resourcePath !== undefined &&
-          <Typography color="textPrimary" className={classes.link}>
-            <CodeIcon className={classes.icon} />
-            {props.resourcePath}
-          </Typography>
-        }
-      </Breadcrumbs>
-    </Paper>
-  );
+          {projectName !== undefined && (
+            <Link
+              component={RouterLink}
+              color="inherit"
+              to={"/" + projectName}
+              className={classes.link}
+            >
+              {projectName}
+            </Link>
+          )}
+          {projectPath.map(item => (
+            <Link
+              component={RouterLink}
+              color="inherit"
+              to={"/" + projectName + "/" + item.path}
+              className={classes.link}
+              key={item.path}
+            >
+              <Typography
+                color="textPrimary"
+                className={classes.link}
+                key={item.name}
+              >
+                {item.name}
+              </Typography>
+            </Link>
+          ))}
+        </Breadcrumbs>
+      </Paper>
+    );
+  }
 }
 
 Breadcrumb.propTypes = {

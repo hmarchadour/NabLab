@@ -5,7 +5,8 @@ import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import Typography from "@material-ui/core/Typography";
 import Modal from "@material-ui/core/Modal";
-
+import FolderIcon from "@material-ui/icons/Folder";
+import CodeIcon from "@material-ui/icons/Code";
 import ResourceForm from "./ResourceForm";
 
 const styles = theme => ({
@@ -59,10 +60,10 @@ class AddResource extends React.Component {
   };
 
   render() {
-    const { classes, ...others } = this.props;
-
+    const { classes, folder, ...others } = this.props;
+    const title = folder ? " Create a folder" : " Create a file";
     return (
-      <div>
+      <span>
         <Fab
           color="primary"
           aria-label="Add"
@@ -70,6 +71,7 @@ class AddResource extends React.Component {
           onClick={this.handleOpen}
         >
           <AddIcon />
+          {folder ? <FolderIcon /> : <CodeIcon />}
         </Fab>
         <Modal
           aria-labelledby="simple-modal-title"
@@ -79,13 +81,17 @@ class AddResource extends React.Component {
         >
           <div style={getModalStyle()} className={classes.paper}>
             <Typography variant="h6" id="modal-title">
-              Create a file
+              {title}
             </Typography>
             <Typography variant="subtitle1" id="simple-modal-description" />
-            <ResourceForm {...others} onSubmit={this.handleAddResource} />
+            <ResourceForm
+              folder={folder}
+              {...others}
+              onSubmit={this.handleAddResource}
+            />
           </div>
         </Modal>
-      </div>
+      </span>
     );
   }
 }

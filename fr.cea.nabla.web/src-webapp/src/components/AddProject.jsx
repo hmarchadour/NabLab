@@ -49,7 +49,7 @@ class AddProject extends React.Component {
     const { classes } = this.props;
 
     return (
-      <div>
+      <span>
         <Fab
           color="primary"
           aria-label="Add"
@@ -72,7 +72,7 @@ class AddProject extends React.Component {
             <ProjectForm onSubmit={this.handleAddProject} />
           </div>
         </Modal>
-      </div>
+      </span>
     );
   }
 }
