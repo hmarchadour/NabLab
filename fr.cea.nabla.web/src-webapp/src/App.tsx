@@ -59,6 +59,29 @@ class App extends Component<
         resourcePath={decodeURIComponent(match.params.resourcePath)}
       />
     );
+
+    const renderRepresentation = (
+      {
+        match
+      }: {
+        match: match<{
+          projectName: string;
+          resourcePath: string;
+          viewpoint: string;
+          representationName: string;
+        }>;
+      },
+      ...others
+    ) => (
+      <ResourcePage
+        {...others}
+        projectName={match.params.projectName}
+        resourcePath={decodeURIComponent(match.params.resourcePath)}
+        viewpoint={match.params.viewpoint}
+        representationName={match.params.representationName}
+      />
+    );
+
     const renderProject = (
       { match }: { match: match<{ projectName: string }> },
       ...others
@@ -83,6 +106,10 @@ class App extends Component<
           <Switch>
             <Route exact path="/" component={ProjectsPage} />
             <Route path="/:projectName/:resourcePath" render={renderResource} />
+            <Route
+              path="/:projectName/:resourcePath/aird/:viewpoint/:representationName"
+              render={renderRepresentation}
+            />
             <Route path="/:projectName" render={renderProject} />
           </Switch>
         </div>

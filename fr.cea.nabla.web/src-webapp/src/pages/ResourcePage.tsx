@@ -2,6 +2,8 @@ import React, { Component } from "react";
 
 import NablaEditor from "../components/editors/NablaEditor";
 import DefaultViewer from "../components/viewer/DefaultViewer";
+import AIRDViewer from "../components/viewer/AIRDViewer";
+import RepresentationViewer from "../components/viewer/RepresentationViewer";
 import Breadcrumb from "../components/Breadcrumb";
 import FolderContents from "../components/FolderContents";
 import { getResource } from "../services/ResourceServices";
@@ -13,6 +15,8 @@ import { withStyles } from "@material-ui/core/styles";
 interface Props {
   projectName: string;
   resourcePath: string;
+  viewpoint?: string;
+  representationName?: string;
 }
 
 interface State {
@@ -43,6 +47,22 @@ class ResourcePage extends Component<Props, State> {
               resource={resource}
             />
           );
+        } else if (resourcePath.endsWith(".aird")) {
+          if (
+            this.props.viewpoint !== undefined &&
+            this.props.representationName !== undefined
+          ) {
+            resourceContent = (
+              <RepresentationViewer
+                {...others}
+                resource={resource}
+                viewpoint={this.props.viewpoint}
+                representationName={this.props.representationName}
+              />
+            );
+          } else {
+            resourceContent = <AIRDViewer {...others} resource={resource} />;
+          }
         } else {
           resourceContent = <DefaultViewer {...others} resource={resource} />;
         }
