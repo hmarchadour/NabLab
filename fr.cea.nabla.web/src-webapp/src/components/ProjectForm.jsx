@@ -9,8 +9,7 @@ import { createProject } from "../services/ProjectServices";
 import SaveIcon from "@material-ui/icons/Save";
 const styles = theme => ({
   container: {
-    display: "flex",
-    flexWrap: "wrap"
+    display: "flex"
   },
   textField: {
     marginLeft: theme.spacing.unit,

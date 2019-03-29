@@ -32,10 +32,10 @@ export class Breadcrumb extends Component {
         ? this.props.resourcePath.split("/")
         : [];
     const projectPath = [];
-    let acc = "";
+    let computedPath = "";
     for (let subPath of pathArray) {
-      acc += subPath + "/";
-      projectPath.push({ path: encodeURIComponent(acc), name: subPath });
+      computedPath += "/" + encodeURIComponent(subPath);
+      projectPath.push({ path: computedPath, name: subPath });
     }
     return (
       <Paper className={classes.root}>
@@ -55,14 +55,16 @@ export class Breadcrumb extends Component {
               to={"/" + projectName}
               className={classes.link}
             >
-              {projectName}
+              <Typography color="textPrimary" className={classes.link}>
+                {projectName}
+              </Typography>
             </Link>
           )}
           {projectPath.map(item => (
             <Link
               component={RouterLink}
               color="inherit"
-              to={"/" + projectName + "/" + item.path}
+              to={"/" + projectName + item.path}
               className={classes.link}
               key={item.path}
             >
@@ -75,6 +77,12 @@ export class Breadcrumb extends Component {
               </Typography>
             </Link>
           ))}
+
+          {this.props.representationName !== undefined && (
+            <Typography color="textPrimary" className={classes.link}>
+              {this.props.representationName}
+            </Typography>
+          )}
         </Breadcrumbs>
       </Paper>
     );

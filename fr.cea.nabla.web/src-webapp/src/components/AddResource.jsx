@@ -22,24 +22,11 @@ const styles = theme => ({
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
     padding: theme.spacing.unit * 4,
-    outline: "none"
+    outline: "none",
+    top: `25%`,
+    left: `25%`
   }
 });
-
-function rand() {
-  return Math.round(Math.random() * 20) - 10;
-}
-
-function getModalStyle() {
-  const top = 50 + rand();
-  const left = 50 + rand();
-
-  return {
-    top: `${top}%`,
-    left: `${left}%`,
-    transform: `translate(-${top}%, -${left}%)`
-  };
-}
 
 class AddResource extends React.Component {
   state = {
@@ -79,7 +66,7 @@ class AddResource extends React.Component {
           open={this.state.open}
           onClose={this.handleClose}
         >
-          <div style={getModalStyle()} className={classes.paper}>
+          <div className={classes.paper}>
             <Typography variant="h6" id="modal-title">
               {title}
             </Typography>

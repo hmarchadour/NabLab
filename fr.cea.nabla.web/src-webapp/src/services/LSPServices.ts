@@ -4,11 +4,13 @@ import {
   ErrorAction,
   createConnection
 } from "monaco-languageclient";
+
 import { install, create, get } from "./CustomMonacoService";
-import * as monaco from "monaco-editor";
+
 import { listen, MessageConnection } from "vscode-ws-jsonrpc";
 import { FEATURE, LANGUAGE_ID, HOST, PORT } from "./const";
 import { Resource } from "../dto/Resource";
+const monaco = require("monaco-editor-core");
 const normalizeUrl = require("normalize-url");
 const ReconnectingWebSocket = require("reconnecting-websocket");
 

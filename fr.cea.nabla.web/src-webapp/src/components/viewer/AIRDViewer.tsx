@@ -9,10 +9,7 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItemText from "@material-ui/core/ListItemText";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import Avatar from "@material-ui/core/Avatar";
-import IconButton from "@material-ui/core/IconButton";
-import DeleteIcon from "@material-ui/icons/Delete";
 import InsertChart from "@material-ui/icons/InsertChart";
 
 import { withRouter, RouteComponentProps } from "react-router-dom";
@@ -46,13 +43,9 @@ class AIRDViewer extends Component<Props, State> {
                     "/" +
                       airdResource.project +
                       "/" +
-                      encodeURIComponent(
-                        airdResource.path +
-                          "/aird/" +
-                          representation.desc.viewpointName +
-                          "/" +
-                          representation.name
-                      )
+                      encodeURIComponent(airdResource.path) +
+                      "/" +
+                      encodeURIComponent(representation.name)
                   );
                 }}
               >

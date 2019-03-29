@@ -77,7 +77,6 @@ class App extends Component<
         {...others}
         projectName={match.params.projectName}
         resourcePath={decodeURIComponent(match.params.resourcePath)}
-        viewpoint={match.params.viewpoint}
         representationName={match.params.representationName}
       />
     );
@@ -105,11 +104,11 @@ class App extends Component<
         <div className={classes.content}>
           <Switch>
             <Route exact path="/" component={ProjectsPage} />
-            <Route path="/:projectName/:resourcePath" render={renderResource} />
             <Route
-              path="/:projectName/:resourcePath/aird/:viewpoint/:representationName"
+              path="/:projectName/:resourcePath/:representationName"
               render={renderRepresentation}
             />
+            <Route path="/:projectName/:resourcePath" render={renderResource} />
             <Route path="/:projectName" render={renderProject} />
           </Switch>
         </div>

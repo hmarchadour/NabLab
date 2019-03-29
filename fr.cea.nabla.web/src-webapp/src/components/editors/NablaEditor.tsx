@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import "./NablaEditor.css";
-import * as monaco from "monaco-editor";
 import classNames from "classnames";
 import { LSPServices } from "../../services/LSPServices";
 import { getTextFile, updateTextFile } from "../../services/FileServices";
