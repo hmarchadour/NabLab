@@ -1,6 +1,6 @@
 {
   "name": "NabLab-Web",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "dependencies": {
     "@material-ui/core": "3.9.2",
@@ -71,7 +71,11 @@
     "webpack-dev-server": "3.1.14",
     "webpack-manifest-plugin": "2.0.4",
     "workbox-webpack-plugin": "3.6.3",
-    "react-mathjax-preview": "0.1.11"
+    "react-mathjax-preview": "0.1.11",
+    "inversify": "^4.3.0",
+    "snabbdom": "^0.7.0",
+    "sprotty": "0.2.1",
+    "reflect-metadata": "0.1.12"
   },
   "scripts": {
     "start": "node scripts/start.js",

@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import React, { Component } from "react";
 import "./App.css";
 import { Route, Switch, match, Link } from "react-router-dom";
@@ -5,12 +6,10 @@ import ProjectsPage from "./pages/ProjectsPage";
 import ProjectPage from "./pages/ProjectPage";
 import ResourcePage from "./pages/ResourcePage";
 import { available } from "./services/CommonServices";
-import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import MathJax from "react-mathjax-preview";
 import { version, name } from "../package.json";
 
 const styles = theme => ({
@@ -97,7 +96,7 @@ class App extends Component<
         <AppBar position="static" color="default">
           <Toolbar>
             <Typography variant="h4" color="inherit">
-              NabLab
+              NabLab (v{version})
             </Typography>
           </Toolbar>
         </AppBar>
@@ -112,19 +111,6 @@ class App extends Component<
             <Route path="/:projectName" render={renderProject} />
           </Switch>
         </div>
-
-        {/* Footer */}
-        <footer className={classes.footer}>
-          <Typography
-            variant="subtitle1"
-            align="center"
-            color="textSecondary"
-            component="p"
-          >
-            {name} v{version}
-          </Typography>
-        </footer>
-        {/* End footer */}
       </div>
     );
   }

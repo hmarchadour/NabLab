@@ -15,7 +15,6 @@ import { withStyles } from "@material-ui/core/styles";
 interface Props {
   projectName: string;
   resourcePath: string;
-  viewpoint?: string;
   representationName?: string;
 }
 
@@ -48,15 +47,11 @@ class ResourcePage extends Component<Props, State> {
             />
           );
         } else if (resourcePath.endsWith(".aird")) {
-          if (
-            this.props.viewpoint !== undefined &&
-            this.props.representationName !== undefined
-          ) {
+          if (this.props.representationName !== undefined) {
             resourceContent = (
               <RepresentationViewer
                 {...others}
                 resource={resource}
-                viewpoint={this.props.viewpoint}
                 representationName={this.props.representationName}
               />
             );
@@ -72,7 +67,11 @@ class ResourcePage extends Component<Props, State> {
     }
     return (
       <div>
-        <Breadcrumb projectName={projectName} resourcePath={resourcePath} />
+        <Breadcrumb
+          projectName={projectName}
+          resourcePath={resourcePath}
+          representationName={this.props.representationName}
+        />
         {resourceContent}
       </div>
     );

@@ -3,12 +3,15 @@ import { Resource } from "../../dto/Resource";
 import { Representation } from "../../dto/Representation";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { getAIRDResource } from "../../services/SiriusServices";
+import { HOST, PORT } from "../../services/const";
 import { withRouter, RouteComponentProps } from "react-router-dom";
-import { URI } from "../../services/const";
+import sample from "./sample.png";
+import "./sprotty.css";
+import "./page.css";
+import "./diagram.css";
+import { initializeSiriusDiagram } from "../../sirius-frontend/app/standalone";
 interface Props extends RouteComponentProps<any> {
   resource: Resource;
-
-  viewpoint: string;
   representationName: string;
 }
 
@@ -29,20 +32,22 @@ class RepresentationViewer extends Component<Props, State> {
     const representation = this.state.representation;
     let content;
     if (representation !== undefined && representation !== null) {
-      content = (
-        <div>
-          TODO : afficher {representation.desc.viewpointName}/
-          {representation.desc.representationName}/{representation.name}
-        </div>
-      );
+      content = <div />;
     } else {
       content = <CircularProgress />;
     }
 
     return (
-      <div>
-        <div ref={this.siriusDom} id="sirius" />
-        {content}
+      <div className="container">
+        <div className="diagram-main">
+          <div ref={this.siriusDom} id="sirius" className="sprotty">
+            {content}
+          </div>
+        </div>
+        <div className="palette-main">
+          <h2>Layers</h2>
+          <div id="layers-palette" />
+        </div>
       </div>
     );
   }
@@ -52,21 +57,18 @@ class RepresentationViewer extends Component<Props, State> {
     if (dom == null) {
       return;
     }
-    const { resource, representationName, viewpoint } = this.props;
+    const { resource, representationName } = this.props;
     getAIRDResource(resource).then(airdResource => {
       airdResource.representations.forEach(representation => {
-        if (
-          viewpoint === representation.desc.viewpointName &&
-          representationName === representation.name
-        ) {
+        if (representationName === representation.name) {
           this.setState({ representation });
-          /*initializeSiriusDiagram(
+          initializeSiriusDiagram(
             airdResource.project,
             airdResource.name,
             representation.name,
-            URI,
+            `${HOST}:${PORT}`,
             dom.id
-          );*/
+          );
           return;
         }
       });
