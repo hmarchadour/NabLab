@@ -20,27 +20,176 @@ monaco.languages.register({
   aliases: [LANGUAGE_ID.toUpperCase(), LANGUAGE_ID],
   mimetypes: ["text/" + LANGUAGE_ID]
 });
+monaco.languages.setMonarchTokensProvider("nabla", {
+  // Set defaultToken to invalid to see what you do not tokenize yet
+  // defaultToken: 'invalid',
 
-monaco.editor.defineTheme(LANGUAGE_ID, {
-  base: "vs",
-  inherit: false,
-  colors: {
-    "editor.foreground": "#000000",
-    "editor.background": "#EDF9FA",
-    "editorCursor.foreground": "#8B0000",
-    "editor.lineHighlightBackground": "#0000FF20",
-    "editorLineNumber.foreground": "#008800",
-    "editor.selectionBackground": "#88000030",
-    "editor.inactiveSelectionBackground": "#88000015"
-  },
-  rules: [
-    { token: "import", foreground: "808080" },
-    { token: "custom-error", foreground: "ff0000", fontStyle: "bold" },
-    { token: "custom-notice", foreground: "FFA500" },
-    { token: "custom-date", foreground: "008800" }
-  ]
-});
-monaco.editor.setTheme(LANGUAGE_ID);
+  keywords: [
+    "\u2115",
+    "\u211D",
+    "\u211D\u00B2",
+    "\u211D\u00B2\u02E3\u00B2",
+    "\u211D\u00B3",
+    "\u211D\u00B3\u02E3\u00B3",
+    "\u213E",
+    "\u2192",
+    "\u2200",
+    "\u2205",
+    "\u2208",
+    "\u25BA",
+    "\u25C4",
+    "cell",
+    "connectivities",
+    "const",
+    "else",
+    "face",
+    "false",
+    "functions",
+    "if",
+    "module",
+    "node",
+    "true",
+    "with"
+  ],
+
+  typeKeywords: [
+    "boolean",
+    "double",
+    "byte",
+    "int",
+    "short",
+    "char",
+    "void",
+    "long",
+    "float"
+  ],
+
+  operators: [
+    "=",
+    ">",
+    "<",
+    "!",
+    "~",
+    "?",
+    ":",
+    "==",
+    "<=",
+    ">=",
+    "!=",
+    "&&",
+    "||",
+    "++",
+    "--",
+    "+",
+    "-",
+    "*",
+    "/",
+    "&",
+    "|",
+    "^",
+    "%",
+    "<<",
+    ">>",
+    ">>>",
+    "+=",
+    "-=",
+    "*=",
+    "/=",
+    "&=",
+    "|=",
+    "^=",
+    "%=",
+    "<<=",
+    ">>=",
+    ">>>="
+  ],
+
+  // we include these common regular expressions
+  symbols: /[=><!~?:&|+\-*\/\^%]+/,
+
+  // C# style strings
+  escapes: /\\(?:[abfnrtv\\"']|x[0-9A-Fa-f]{1,4}|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})/,
+
+  // The main tokenizer for our languages
+  tokenizer: {
+    root: [
+      // identifiers and keywords
+      [
+        /[a-zA-Z\u0394-\u03F2\u220F-\u221C_][a-zA-Z\u0394-\u03F20-9\u2211_]*/,
+        {
+          cases: {
+            "@typeKeywords": "keyword",
+            "@keywords": "keyword",
+            "@default": "identifier"
+          }
+        }
+      ],
+      [/[A-Z][\w\$]*/, "type.identifier"], // to show class names nicely
+
+      // whitespace
+      { include: "@whitespace" },
+
+      // delimiters and operators
+      [/[{}()\[\]]/, "@brackets"],
+      [/[<>](?!@symbols)/, "@brackets"],
+      [
+        /@symbols/,
+        {
+          cases: {
+            "@operators": "operator",
+            "@default": ""
+          }
+        }
+      ],
+
+      // @ annotations.
+      // As an example, we emit a debugging log message on these tokens.
+      // Note: message are supressed during the first load -- change some lines to see them.
+      [
+        /@\s*[a-zA-Z_\$][\w\$]*/,
+        { token: "annotation", log: "annotation token: $0" }
+      ],
+
+      // numbers
+      [/\d*\.\d+([eE][\-+]?\d+)?/, "number.float"],
+      [/0[xX][0-9a-fA-F]+/, "number.hex"],
+      [/\d+/, "number"],
+
+      // delimiter: after number because of .\d floats
+      [/[;,.]/, "delimiter"],
+
+      // strings
+      [/"([^"\\]|\\.)*$/, "string.invalid"], // non-teminated string
+      [/"/, { token: "string.quote", bracket: "@open", next: "@string" }],
+
+      // characters
+      [/'[^\\']'/, "string"],
+      [/(')(@escapes)(')/, ["string", "string.escape", "string"]],
+      [/'/, "string.invalid"]
+    ],
+
+    comment: [
+      [/[^\/*]+/, "comment"],
+      [/\/\*/, "comment", "@push"], // nested comment
+      ["\\*/", "comment", "@pop"],
+      [/[\/*]/, "comment"]
+    ],
+
+    string: [
+      [/[^\\"]+/, "string"],
+      [/@escapes/, "string.escape"],
+      [/\\./, "string.escape.invalid"],
+      [/"/, { token: "string.quote", bracket: "@close", next: "@pop" }]
+    ],
+
+    whitespace: [
+      [/[ \t\r\n]+/, "white"],
+      [/\/\*/, "comment", "@comment"],
+      [/\/\/.*$/, "comment"]
+    ]
+  }
+} as any);
+
 export class LSPServices {
   public service;
 
