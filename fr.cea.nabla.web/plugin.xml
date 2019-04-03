@@ -9,4 +9,15 @@
             id="fr.cea.nabla.web.backend.internal.NabLaLSPServerConfigurator">
       </descriptor>
    </extension>
+      <extension
+         id="org.eclipse.sirius.server.frontend.SiriusServerFrontendConfigurator"
+         name="%SiriusServerFrontendConfigurator_label"
+         point="org.eclipse.sirius.server.siriusServerConfigurator">
+      <descriptor
+            class="fr.cea.nabla.web.internal.SiriusServerFrontendConfigurator"
+            description=""
+            id="fr.cea.nabla.web.SiriusServerFrontendConfigurator"
+            label="Front-end Server">
+      </descriptor>
+   </extension>
 </plugin>

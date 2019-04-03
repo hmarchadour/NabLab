@@ -4,7 +4,7 @@ import { InMemoryCache } from "apollo-cache-inmemory";
 export const FEATURE = "NabLab";
 export const LANGUAGE_ID = "nabla";
 export const HOST = "localhost";
-export const PORT = "5007";
+export const PORT = "8080";
 
 export const URI = `http://${HOST}:${PORT}`;
 export const URI_API = `${URI}/api`;
