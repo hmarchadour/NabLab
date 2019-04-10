@@ -33,6 +33,8 @@ interface Props {
 
 interface State {
   formula: string | null;
+  height: number;
+  width: number;
 }
 class NablaEditor extends Component<Props, State> {
   private editorDom: React.RefObject<HTMLDivElement>;
@@ -43,13 +45,18 @@ class NablaEditor extends Component<Props, State> {
 
   constructor(props: any) {
     super(props);
-    this.state = { formula: null };
+    this.state = {
+      formula: null,
+      height: window.innerHeight,
+      width: window.innerWidth
+    };
     this.lspService = new LSPServices();
     this.editorDom = React.createRef();
     this.editor = null;
     // This binding is necessary to make `this` work in the callback
     this.save = this.save.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.updateDimensions = this.updateDimensions.bind(this);
   }
 
   componentDidMount() {
@@ -74,11 +81,24 @@ class NablaEditor extends Component<Props, State> {
         );
       });
     }
+    window.addEventListener("resize", this.updateDimensions);
   }
 
   componentWillUnmount() {
     if (this.editor !== null) {
       this.lspService.deleteLSPEditor(this.editor);
+    }
+    window.removeEventListener("resize", this.updateDimensions);
+  }
+
+  updateDimensions() {
+    this.setState({
+      height: window.innerHeight,
+      width: window.innerWidth
+    });
+
+    if (this.editor !== null) {
+      this.editor.layout();
     }
   }
 
